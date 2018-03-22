@@ -52,6 +52,8 @@ public class HitApi {
 		digitVsProgress = new HashMap<Integer, Boolean>();
 		for(int n = minChars; n <= maxChars; n++) {
 			List<Integer> listOfPositionsOfSizeN = new ArrayList<Integer>(n);
+			for(int index = 0; index < n; index++)
+				listOfPositionsOfSizeN.add(index, 0);
 			lengthVsNextGeneratePositionMapping.put(n, listOfPositionsOfSizeN);
 			digitVsProgress.put(n, false);
 		}
@@ -67,7 +69,29 @@ public class HitApi {
 		return null;
 	}
 	
-	private String getNextWord() {
+	private void incrementProgress(Integer currentLength, List<Integer> currentPosition) {
+		for(int index = currentLength-1; index >= 0; index--) {
+			int value = currentPosition.get(index);
+			if(value == urlCharacters.size()-1) {
+				currentPosition.set(index, 0);
+				if(index == 0) {
+					if(currentLength == maxChars) {
+						digitVsProgress.put(currentLength, false);
+					} else {
+						digitVsProgress.put(currentLength, false);
+						digitVsProgress.put(currentLength+1, true);
+					}
+				} else {
+					continue;
+				}
+			} else {
+				currentPosition.set(index, value+1);
+				break;
+			}
+		}
+	}
+	
+	public String getNextWord() {
 		Integer length = getWordLengthToBeGenerated();
 		List<Integer> nextGeneratePosition = null;
 		if(null != length)
@@ -81,28 +105,6 @@ public class HitApi {
 			return word.toString();
 		} else {
 			return null;
-		}
-	}
-
-	private void incrementProgress(Integer currentLength, List<Integer> currentPosition) {
-		for(int index = currentLength-1; index >= 0; index--) {
-			int value = currentPosition.get(index);
-			if(value == urlCharacters.size()-1) {
-				currentPosition.add(index, 0);
-				if(index == 0) {
-					if(currentLength == maxChars) {
-						digitVsProgress.put(currentLength, false);
-					} else {
-						digitVsProgress.put(currentLength, false);
-						digitVsProgress.put(currentLength+1, true);
-					}
-				} else {
-					continue;
-				}
-			} else {
-				currentPosition.add(index, value+1);
-				break;
-			}
 		}
 	}
 

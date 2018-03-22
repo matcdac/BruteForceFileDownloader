@@ -1,5 +1,6 @@
 package d;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -7,6 +8,8 @@ public class Start {
 	
 	private static String basePath = "http://www.mca.gov.in/Ministry/pdf/";
 	private static Set<String> extensions = new HashSet<String>();
+	private static int minLength = 1;
+	private static int maxLength = 3;
 
 	private static void addText() {
 		extensions.add(".txt");
@@ -192,7 +195,18 @@ public class Start {
 
 	public static void main(String[] args) {
 		addExtensions();
-		HitApi hitApi = new HitApi(basePath, extensions, 1, 2);
+		HitApi hitApi = new HitApi(basePath, extensions, minLength, maxLength);
+		String word = null;
+		long counter = 0;
+		long start = new Date().getTime();
+		while(null != (word = hitApi.getNextWord())) {
+			counter++;
+			System.out.println(word);
+		}
+		long end = new Date().getTime();
+		System.out.println();
+		System.out.println("Total Words Generated of Length Boundary [" + minLength + "," + maxLength + "] -> " + counter);
+		System.out.println("Total Time Taken (milliseconds) -> " + (end - start));
 	}
 	
 	
