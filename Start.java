@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class Start {
 	
-	private static String basePath = "http://www.mca.gov.in/Ministry/pdf/";
+	private static String basePath = "http://www.somewebsite.com/";
 	private static Set<String> extensions = new HashSet<String>();
 	private static int minLength = 1;
 	private static int maxLength = 3;
